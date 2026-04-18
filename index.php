@@ -111,6 +111,40 @@ if (isset($_SESSION['user_id'])) {
             }
             mysqli_stmt_close($stmt_client_published);
         }
+
+        // Count approved quests from client's posted quests
+        $sql_approved = "SELECT COUNT(*) AS approved_count
+                        FROM quest_responses qr
+                        INNER JOIN quests q ON qr.quest_id = q.id
+                        WHERE q.created_by = ? AND qr.status = 'approved'";
+        $stmt_approved = mysqli_prepare($conn, $sql_approved);
+        if ($stmt_approved) {
+            mysqli_stmt_bind_param($stmt_approved, "i", $user_id);
+            mysqli_stmt_execute($stmt_approved);
+            $approved_result = mysqli_stmt_get_result($stmt_approved);
+            if ($approved_result) {
+                $approved_row = mysqli_fetch_assoc($approved_result);
+                $guild_stats['client_approved_quests'] = (int)($approved_row['approved_count'] ?? 0);
+            }
+            mysqli_stmt_close($stmt_approved);
+        }
+
+        // Count completed quests from client's posted quests
+        $sql_completed = "SELECT COUNT(*) AS completed_count
+                         FROM quest_responses qr
+                         INNER JOIN quests q ON qr.quest_id = q.id
+                         WHERE q.created_by = ? AND qr.status = 'completed'";
+        $stmt_completed = mysqli_prepare($conn, $sql_completed);
+        if ($stmt_completed) {
+            mysqli_stmt_bind_param($stmt_completed, "i", $user_id);
+            mysqli_stmt_execute($stmt_completed);
+            $completed_result = mysqli_stmt_get_result($stmt_completed);
+            if ($completed_result) {
+                $completed_row = mysqli_fetch_assoc($completed_result);
+                $guild_stats['client_completed_quests'] = (int)($completed_row['completed_count'] ?? 0);
+            }
+            mysqli_stmt_close($stmt_completed);
+        }
     }
 
     if ($is_admin) {
@@ -190,6 +224,7 @@ if ($leaderboard_result) {
                 </li>
 
             <?php else: ?>
+
                 <?php if ($_SESSION['member_group'] === 'client' || ($_SESSION['member_group'] ?? '') === 'admin'): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="create_quest.php">New Quest</a>
@@ -305,8 +340,10 @@ if ($leaderboard_result) {
                             <a class="btn btn-primary btn-xl text-uppercase home-pixel-btn ghost" href="#login" onclick="document.getElementById('id02').style.display='block', document.getElementById('id01').style.display='none';">Join Us</a>
                         <?php else: ?>
                             <a class="btn btn-primary btn-xl text-uppercase home-pixel-btn" href="quest_list.php">Guild Board</a>
-                            <?php if (($_SESSION['member_group'] ?? '') === 'client' || ($_SESSION['member_group'] ?? '') === 'admin'): ?>
+                            <?php if (($_SESSION['member_group'] ?? '') === 'client'): ?>
                                 <a class="btn btn-primary btn-xl text-uppercase home-pixel-btn ghost" href="create_quest.php">Post Quest</a>
+                            <?php elseif (($_SESSION['member_group'] ?? '') === 'admin'): ?>
+                                <a class="btn btn-primary btn-xl text-uppercase home-pixel-btn ghost" href="manage_users.php">Manage User</a>
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
@@ -324,21 +361,26 @@ if ($leaderboard_result) {
                         <p><span>Role:</span> <?php echo htmlspecialchars($_SESSION['member_group'] ?? 'member'); ?></p>
                         <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
                             <p><span>Access:</span> Unlimited</p>
+                            <p><span>Level:</span> <?php echo (int)$guild_stats['level']; ?></p>
                         <?php elseif (($_SESSION['member_group'] ?? '') === 'adventurer'): ?>
                             <p><span>Access:</span> Accept Only</p>
+                            <p><span>Level:</span> <?php echo (int)$guild_stats['level']; ?></p>
+                            <p><span>EXP:</span> <?php echo (int)$guild_stats['exp']; ?></p>
                         <?php elseif (($_SESSION['member_group'] ?? '') === 'client'): ?>
                             <p><span>Access:</span> Create Only</p>
                         <?php endif; ?>
-                        <p><span>Level:</span> <?php echo (int)$guild_stats['level']; ?></p>
-                        <p><span>EXP:</span> <?php echo (int)$guild_stats['exp']; ?></p>
                         <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
-                            <p><span>Site Applied Quests:</span> <?php echo (int)$guild_stats['site_total_accepted']; ?></p>
+                            <p><span>Posted Quests:</span> <?php echo (int)$guild_stats['client_published_commissions']; ?></p>
+                            <p><span>Approved Quests:</span> <?php echo (int)($guild_stats['client_approved_quests'] ?? 0); ?></p>
+                            <p><span>Completed Quests:</span> <?php echo (int)($guild_stats['client_completed_quests'] ?? 0); ?></p>
                         <?php elseif (($_SESSION['member_group'] ?? '') === 'adventurer'): ?>
-                            <p><span>Applied:</span> <?php echo (int)$guild_stats['total_quests']; ?></p>
                             <p><span>Rewards:</span> <?php echo (int)$guild_stats['adventurer_reward_total']; ?></p>
+                            <p><span>Applied:</span> <?php echo (int)$guild_stats['total_quests']; ?></p>
                             <p><span>Completed Quests:</span> <?php echo (int)$guild_stats['completed_quests']; ?></p>
                         <?php elseif (($_SESSION['member_group'] ?? '') === 'client'): ?>
                             <p><span>Posted Quests:</span> <?php echo (int)$guild_stats['client_published_commissions']; ?></p>
+                            <p><span>Approved Quests:</span> <?php echo (int)($guild_stats['client_approved_quests'] ?? 0); ?></p>
+                            <p><span>Completed Quests:</span> <?php echo (int)($guild_stats['client_completed_quests'] ?? 0); ?></p>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>

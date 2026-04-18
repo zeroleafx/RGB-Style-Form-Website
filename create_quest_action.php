@@ -11,6 +11,32 @@ if (($_SESSION['role'] ?? '') !== 'admin' && ($_SESSION['member_group'] ?? '') !
     die("你沒有權限發委託");
 }
 
+/* Check if user is banned */
+$ban_check_sql = "SELECT banned_until, is_permanent_ban FROM users WHERE id = ?";
+$ban_check_stmt = mysqli_prepare($conn, $ban_check_sql);
+if (!$ban_check_stmt) {
+    die("Ban檢查失敗：" . mysqli_error($conn));
+}
+
+mysqli_stmt_bind_param($ban_check_stmt, "i", $_SESSION['user_id']);
+mysqli_stmt_execute($ban_check_stmt);
+$ban_result = mysqli_stmt_get_result($ban_check_stmt);
+$ban_data = mysqli_fetch_assoc($ban_result);
+mysqli_stmt_close($ban_check_stmt);
+
+if ($ban_data) {
+    $is_permanent_ban = (int)($ban_data['is_permanent_ban'] ?? 0);
+    $banned_until = $ban_data['banned_until'] ?? null;
+
+    if ($is_permanent_ban === 1) {
+        die("您已被永久封禁，無法發佈委託");
+    }
+
+    if ($banned_until !== null && strtotime($banned_until) > time()) {
+        die("您正被禁用，無法發佈委託。解禁時間：" . $banned_until);
+    }
+}
+
 $title = trim($_POST['title'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $level_required = (int)($_POST['level_required'] ?? 1);

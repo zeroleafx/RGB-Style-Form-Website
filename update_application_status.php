@@ -121,7 +121,7 @@ try {
         if (!mysqli_stmt_execute($stmt)) throw new Exception("EXP 更新失敗：" . mysqli_stmt_error($stmt));
         mysqli_stmt_close($stmt);
 
-        $sql = "SELECT exp FROM users WHERE id = ?";
+        $sql = "SELECT exp, level FROM users WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) throw new Exception("讀取 EXP SQL 準備失敗：" . mysqli_error($conn));
         mysqli_stmt_bind_param($stmt, "i", $data['user_id']);
@@ -130,13 +130,25 @@ try {
         $user = mysqli_fetch_assoc($res2);
         mysqli_stmt_close($stmt);
 
-        $new_exp = (int)($user['exp'] ?? 0);
-        $new_level = floor($new_exp / 1000) + 1;
+        $total_exp = (int)($user['exp'] ?? 0);
+        $current_level = (int)($user['level'] ?? 1);
 
-        $sql = "UPDATE users SET level = ? WHERE id = ?";
+        // Level up system: 1000 exp per level
+        $exp_per_level = 1000;
+        $new_level = $current_level;
+        $remaining_exp = $total_exp;
+
+        // Calculate how many levels gained
+        while ($remaining_exp >= $exp_per_level) {
+            $remaining_exp -= $exp_per_level;
+            $new_level++;
+        }
+
+        // Update both level and remaining exp
+        $sql = "UPDATE users SET level = ?, exp = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) throw new Exception("更新 level SQL 準備失敗：" . mysqli_error($conn));
-        mysqli_stmt_bind_param($stmt, "ii", $new_level, $data['user_id']);
+        mysqli_stmt_bind_param($stmt, "iii", $new_level, $remaining_exp, $data['user_id']);
         if (!mysqli_stmt_execute($stmt)) throw new Exception("更新 level 失敗：" . mysqli_stmt_error($stmt));
         mysqli_stmt_close($stmt);
 
