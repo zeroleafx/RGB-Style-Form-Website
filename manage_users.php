@@ -54,6 +54,7 @@ if ($stmt) {
 }
 
 $msg = $_GET['msg'] ?? '';
+$error_detail = $_GET['detail'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -78,6 +79,9 @@ $msg = $_GET['msg'] ?? '';
         <p class="pixel-label" style="color: #90EE90;">✓ User has been modified successfully</p>
     <?php elseif ($msg === 'error'): ?>
         <p class="pixel-label" style="color: #FF6B6B;">✗ An error occurred</p>
+        <?php if ($error_detail): ?>
+            <p class="pixel-label" style="color: #FFB3BA; font-size: 11px;">Error: <?php echo htmlspecialchars($error_detail); ?></p>
+        <?php endif; ?>
     <?php endif; ?>
 
     <!-- Filter Section -->
@@ -167,8 +171,8 @@ $msg = $_GET['msg'] ?? '';
 </div>
 
 <!-- Ban Modal -->
-<div id="banModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
-    <div class="pixel-container" style="max-width: 400px;">
+<div id="banModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100; justify-content: center; align-items: center;">
+    <div class="pixel-container" style="max-width: 500px; width: 100%;">
         <h2 class="pixel-title">Ban User</h2>
         <form method="POST" action="ban_user.php">
             <input type="hidden" name="action" value="ban">
