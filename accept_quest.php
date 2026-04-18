@@ -202,11 +202,13 @@ foreach ($field_list as $field_id => $field) {
     if ($field['required'] === 1) {
         if ($field['type'] === 'checkbox') {
             if (!isset($answers[$field_id]) || !is_array($answers[$field_id]) || count($answers[$field_id]) === 0) {
-                exit("必填題目未完成：" . htmlspecialchars($field['question']));
+                echo "<script>alert('必填題目未完成：" . addslashes($field['question']) . "');history.back();</script>";
+                exit;
             }
         } else {
             if (!isset($answers[$field_id]) || trim((string)$answers[$field_id]) === '') {
-                exit("必填題目未完成：" . htmlspecialchars($field['question']));
+                echo "<script>alert('必填題目未完成：" . addslashes($field['question']) . "');history.back();</script>";
+                exit;
             }
         }
     }
