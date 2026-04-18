@@ -74,7 +74,7 @@ $result = mysqli_stmt_get_result($stmt);
     <style>
         body, html { height: 100%; }
         body {
-            background-image: url("./assets/img/quest-bg.jpg");
+            background-image: url("./assets/img/quest-bg.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;

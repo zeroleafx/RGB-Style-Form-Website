@@ -166,7 +166,7 @@ $can_submit = $can_participate
         }
 
         body {
-        background-image: url("./assets/img/quest-bg.jpg");
+        background-image: url("./assets/img/quest-bg.png");
         height: 100%;
         background-position: center;             /* Center the image within the viewport */
         background-repeat: no-repeat;            /* Prevent the image from repeating */
