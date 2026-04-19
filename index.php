@@ -229,11 +229,20 @@ if ($leaderboard_result) {
                     <li class="nav-item">
                         <a class="nav-link" href="create_quest.php">New Quest</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_quests.php">My Quests</a>
+                    </li>
                 <?php endif; ?>
 
                 <?php if ($_SESSION['member_group'] === 'adventurer'): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="quest_list.php">Quest List</a>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="manage_announcements.php">Announcements</a>
                     </li>
                 <?php endif; ?>
 
@@ -545,6 +554,9 @@ if ($leaderboard_result) {
         <!-- Ajax -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/Ajax.js"></script>
+
+        <!-- Announcement System -->
+        <script src="js/announcements.js"></script>
 
     </body>
 </html>

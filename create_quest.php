@@ -18,8 +18,14 @@ if (($_SESSION['role'] ?? '') !== 'admin' && ($_SESSION['member_group'] ?? '') !
     <title>Create Quest</title>
     <link href="css/styles.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v6.5.0/css/all.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 <body class="pixel-purple-body">
+    <div style="padding-top: 20px; padding-left: 30px;">
+        <a href="index.php" style="color: #d8c8ff; text-decoration: none; font-weight: bold; font-family: 'Press Start 2P', monospace; font-size: 12px; display: inline-block; padding: 10px 14px; background: linear-gradient(180deg, #2ec4b6 0%, #1f9d93 100%); border: 2px solid #b8fff7; box-shadow: 0 0 10px rgba(46, 196, 182, 0.24), 3px 3px 0 #3a2a52; transition: all 0.2s;" onmouseover="this.style.transform='translate(2px, 2px)'; this.style.boxShadow='0 0 6px rgba(46, 196, 182, 0.22), 1px 1px 0 #3a2a52';" onmouseout="this.style.transform='translate(0, 0)'; this.style.boxShadow='0 0 10px rgba(46, 196, 182, 0.24), 3px 3px 0 #3a2a52';">
+            <i class="fas fa-arrow-left"></i> Home
+        </a>
+    </div>
     <div class="pixel-container builder-box pixel-builder-box">
         <h1 class="pixel-title">Create Quest</h1>
 
@@ -56,13 +62,14 @@ if (($_SESSION['role'] ?? '') !== 'admin' && ($_SESSION['member_group'] ?? '') !
 
             <hr class="pixel-divider">
 
-            <h2 class="pixel-subtitle">Custom Field</h2>
+            <h2 class="pixel-subtitle" style="margin-bottom: 10px">Custom Field</h2>
             <div id="questionContainer"></div>
 
             <button type="button" id="addQuestionBtn" class="pixel-btn">+ Add Options</button>
             <br><br>
 
-            <button type="submit" class="pixel-btn">Publish</button>
+            <button type="submit" class="pixel-btn" name="action" value="publish">Publish</button>
+            <button type="submit" class="pixel-btn" name="action" value="draft" style="background: linear-gradient(180deg, #8b6e88 0%, #6b5471 100%); border-color: #b8a8d8;">Save as Draft</button>
         </form>
     </div>
 

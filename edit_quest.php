@@ -101,7 +101,7 @@ $is_repeatable_checked = ((int)($quest['is_repeatable'] ?? 0) === 1);
 </head>
 <body class="pixel-purple-body">
 <div class="pixel-container">
-    <a class="pixel-link" href="quest_list.php">← Back to Quest List</a>
+    <a class="pixel-link" href="<?php echo (($_GET['from'] ?? 'quest_list') === 'my_quests') ? 'my_quests.php' : 'quest_list.php'; ?>">← Back</a>
     <h1 class="pixel-title">Edit Quest</h1>
 
     <form method="POST" action="update_quest.php">
@@ -176,6 +176,8 @@ $is_repeatable_checked = ((int)($quest['is_repeatable'] ?? 0) === 1);
             value="<?php echo htmlspecialchars($end_local); ?>"
         >
 
+        <br><br>
+
         <label class="pixel-label">
             <input
                 type="checkbox"
@@ -186,13 +188,6 @@ $is_repeatable_checked = ((int)($quest['is_repeatable'] ?? 0) === 1);
             >
             Repeatable
         </label>
-
-        <label class="pixel-label">Status</label>
-        <select name="status" class="pixel-select">
-            <option value="published" <?php echo $quest['status'] === 'published' ? 'selected' : ''; ?>>published</option>
-            <option value="draft" <?php echo $quest['status'] === 'draft' ? 'selected' : ''; ?>>draft</option>
-            <option value="closed" <?php echo $quest['status'] === 'closed' ? 'selected' : ''; ?>>closed</option>
-        </select>
 
         <hr class="pixel-divider">
         <h2 class="pixel-subtitle">Quest Fields</h2>

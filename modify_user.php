@@ -88,7 +88,7 @@ $error = $error ?? '';
 <body class="pixel-purple-body">
 <div class="pixel-container">
     <a class="pixel-link" href="manage_users.php">← Back</a>
-    <h1 class="pixel-title">✏️ Edit User</h1>
+    <h1 class="pixel-title">Edit User</h1>
 
     <?php if (!empty($error)): ?>
         <div class="pixel-field-box">

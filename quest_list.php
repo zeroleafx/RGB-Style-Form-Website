@@ -1,6 +1,10 @@
 <?php
 session_start();
 require_once "db.php";
+require_once "helpers.php";
+
+// Close any expired quests
+close_expired_quests($conn);
 
 $search = trim($_GET['search'] ?? '');
 $sort = $_GET['sort'] ?? 'newest';
@@ -195,37 +199,37 @@ $result = mysqli_stmt_get_result($stmt);
                                 ?>
 
                                 <?php if ($not_started): ?>
-                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>">View Detail</a>
+                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">View Detail</a>
                                     <span class="locked-text">Not yet open</span>
 
                                 <?php elseif ($ended): ?>
-                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>">View Detail</a>
+                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">View Detail</a>
                                     <span class="locked-text">Closed</span>
 
                                 <?php elseif ($level_locked): ?>
-                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>">View Detail</a>
+                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">View Detail</a>
                                     <span class="locked-text">Requires Level <?php echo (int)$row['level_required']; ?></span>
 
                                 <?php elseif ($quest_completed_closed): ?>
-                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>">View Detail</a>
+                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">View Detail</a>
                                     <span class="locked-text">Completed</span>
 
                                 <?php else: ?>
-                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>">Apply Now</a>
+                                    <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">Apply Now</a>
                                 <?php endif; ?>
 
                             <?php else: ?>
-                                <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>">View Detail</a>
+                                <a href="quest_detail.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">View Detail</a>
                             <?php endif; ?>
 
                             <?php if (isset($_SESSION['user_id']) && (($_SESSION['member_group'] ?? '') === 'client') && ((int)$row['created_by'] === (int)$_SESSION['user_id'])): ?>
-                                <a href="edit_quest.php?id=<?php echo (int)$row['id']; ?>">Edit</a>
+                                <a href="edit_quest.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">Edit</a>
                                 <a href="delete_quest.php?id=<?php echo (int)$row['id']; ?>" onclick="return confirm('確定要刪除這個委託嗎？')">Delete</a>
                                 <a href="manage_applications.php?quest_id=<?php echo (int)$row['id']; ?>">Applications</a>
                             <?php endif; ?>
 
                             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                                <a href="edit_quest.php?id=<?php echo (int)$row['id']; ?>">Admin Edit</a>
+                                <a href="edit_quest.php?id=<?php echo (int)$row['id']; ?>&from=quest_list">Admin Edit</a>
                                 <a href="delete_quest.php?id=<?php echo (int)$row['id']; ?>" onclick="return confirm('管理員確定要刪除這個委託嗎？')">Admin Delete</a>
                                 <a href="manage_applications.php?quest_id=<?php echo (int)$row['id']; ?>">Applications</a>
                             <?php endif; ?>

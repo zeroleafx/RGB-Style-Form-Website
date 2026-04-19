@@ -45,6 +45,11 @@ $reward = (int)($_POST['reward'] ?? 0);
 $start_date = $_POST['start_date'] ?? null;
 $end_date = $_POST['end_date'] ?? null;
 $is_repeatable = isset($_POST['is_repeatable']) ? 1 : 0;
+$action = $_POST['action'] ?? 'publish';
+$status = ($action === 'draft') ? 'draft' : 'published';
+
+// Debug
+error_log("Action: " . $action . " | Status: " . $status . " | POST: " . json_encode($_POST));
 
 if ($start_date === '') {
     $start_date = null;
@@ -72,7 +77,7 @@ try {
     // 1. 新增 quests
     $sqlQuest = "INSERT INTO quests
         (title, description, level_required, difficulty, reward, exp_reward, created_by, status, created_at, start_date, end_date, is_repeatable)
-        VALUES (?, ?, ?, ?, ?, ?, ?, 'published', NOW(), ?, ?, ?)";
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)";
 
     $stmtQuest = mysqli_prepare($conn, $sqlQuest);
 
@@ -82,7 +87,7 @@ try {
 
     mysqli_stmt_bind_param(
         $stmtQuest,
-        "ssiiiiissi",
+        "ssiiiiisssi",
         $title,
         $description,
         $level_required,
@@ -90,6 +95,7 @@ try {
         $reward,
         $exp_reward,
         $created_by,
+        $status,
         $start_date,
         $end_date,
         $is_repeatable
@@ -177,10 +183,12 @@ try {
     }
 
     mysqli_commit($conn);
-    
+
+    $message = ($status === 'draft') ? '委託已儲存為草稿 (Status: draft)' : '委託新增成功 (Status: published)';
+    $redirect = ($status === 'draft') ? 'my_quests.php?filter=draft' : 'quest_list.php';
     echo "<script>
-    window.location.href = 'quest_list.php';
-    alert('委託新增成功');
+    window.location.href = '$redirect';
+    alert('$message');
     </script>";
     exit;
 

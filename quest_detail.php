@@ -1,6 +1,10 @@
 <?php
 session_start();
 require_once("db.php");
+require_once("helpers.php");
+
+// Close any expired quests
+close_expired_quests($conn);
 
 $search = trim($_GET['search']??'');
 $sort = $_GET['sort']??'newest';
@@ -102,7 +106,7 @@ $end_dt = !empty($quest['end_date'])
 $time_not_started = $start_dt instanceof DateTime && $now_dt < $start_dt;
 $time_ended = $end_dt instanceof DateTime && $now_dt > $end_dt;
 $time_locked = $time_not_started || $time_ended;
-$can_participate = ($is_adventurer || $is_admin);
+$can_participate = ($is_adventurer);
 
 $already_applied = false;
 $is_repeatable = (int)($quest['is_repeatable'] ?? 0);
@@ -196,7 +200,7 @@ $can_submit = $can_participate
 <div class="quest-detail-page">
     <div class="quest-detail-container">
         <div class="action-row">
-            <a class="btn-link" href="quest_list.php">← Back to Quest List</a>
+            <a class="btn-link" href="<?php echo (($_GET['from'] ?? 'quest_list') === 'my_quests') ? 'my_quests.php' : 'quest_list.php'; ?>">← Back</a>
         </div>
 
         <div class="quest-panel">
@@ -292,7 +296,7 @@ $can_submit = $can_participate
 
             <?php if (!$is_logged_in): ?>
                 <div class="notice">Please login to apply for this quest.</div>
-            <?php elseif (!$can_participate && !$is_client_owner): ?>
+            <?php elseif (!$can_participate && !$is_client_owner && !$is_admin): ?>
                 <div class="notice">View only.</div>
             <?php endif; ?>
 

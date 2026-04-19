@@ -7,6 +7,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $quest_id = (int)($_GET['quest_id'] ?? 0);
+$from = $_GET['from'] ?? 'quest_list';
+
+// Validate 'from' parameter
+if ($from !== 'my_quests') {
+    $from = 'quest_list';
+}
+
 if ($quest_id <= 0) {
     exit("無效的委託 ID");
 }
@@ -75,7 +82,7 @@ $result = mysqli_stmt_get_result($stmt);
 </head>
 <body class="pixel-purple-body">
 <div class="pixel-container">
-    <a class="pixel-link" href="quest_list.php">← Back</a>
+    <a class="pixel-link" href="<?php echo ($from === 'my_quests') ? 'my_quests.php' : 'quest_list.php'; ?>">← Back</a>
     <h1 class="pixel-title">Applications</h1>
 
     <p class="pixel-label">

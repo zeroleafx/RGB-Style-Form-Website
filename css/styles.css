@@ -11585,7 +11585,7 @@ textarea {
   font-family: 'Press Start 2P', monospace;
   background:
       linear-gradient(rgba(24, 10, 42, 0.78), rgba(10, 12, 24, 0.84)),
-      url("../assets/img/quest-bg.png") center/cover fixed no-repeat;
+      url("../assets/img/header-bg.png") center/cover fixed no-repeat;
   color: #f5f1ff;
 }
 

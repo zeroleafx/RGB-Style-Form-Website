@@ -80,7 +80,7 @@ try {
     mysqli_stmt_close($stmt);
 
     mysqli_commit($conn);
-    header("Location: quest_list.php?msg=deleted");
+    header("Location: my_quests.php?msg=deleted");
     exit;
 
 } catch (Throwable $e) {
