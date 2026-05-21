@@ -222,10 +222,30 @@ if ($leaderboard_result) {
                 <li class="nav-item">
                     <a class="nav-link" href="#login" onclick="document.getElementById('id01').style.display='block', document.getElementById('id02').style.display='none';">Login</a>
                 </li>
-
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
             <?php else: ?>
 
-                <?php if ($_SESSION['member_group'] === 'client' || ($_SESSION['member_group'] ?? '') === 'admin'): ?>
+                <?php if ($_SESSION['member_group'] === 'client'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="create_quest.php">New Quest</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_quests.php">My Quests</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                <?php endif; ?>
+
+                <?php if ($_SESSION['member_group'] === 'adventurer'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quest_list.php">Quest List</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                <?php endif; ?>
+
+                <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="manage_announcements.php">Announcements</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="create_quest.php">New Quest</a>
                     </li>
@@ -234,24 +254,11 @@ if ($leaderboard_result) {
                     </li>
                 <?php endif; ?>
 
-                <?php if ($_SESSION['member_group'] === 'adventurer'): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="quest_list.php">Quest List</a>
-                    </li>
-                <?php endif; ?>
-
-                <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manage_announcements.php">Announcements</a>
-                    </li>
-                <?php endif; ?>
-
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Logout</a>
                 </li>
             <?php endif; ?>
 
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
