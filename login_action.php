@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
         "status" => "error",
-        "message" => "非法請求"
+        "message" => "Invalid request method"
     ]);
     exit;
 }
@@ -18,7 +18,7 @@ $password = trim($_POST['password'] ?? '');
 if ($username === '' || $password === '') {
     echo json_encode([
         "status" => "error",
-        "message" => "請輸入帳號與密碼"
+        "message" => "Username and password cannot be empty"
     ]);
     exit;
 }
@@ -29,7 +29,7 @@ $stmt = mysqli_prepare($conn, $sql);
 if (!$stmt) {
     echo json_encode([
         "status" => "error",
-        "message" => "SQL準備失敗：" . mysqli_error($conn)
+        "message" => "SQL preparation failed: " . mysqli_error($conn)
     ]);
     exit;
 }

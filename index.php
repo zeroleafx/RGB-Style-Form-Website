@@ -265,10 +265,10 @@ if ($leaderboard_result) {
     <form class="modal-content animate" id="loginForm">
         <div class="contain">
             <label for="login_username"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" id="login_username" required>
+            <input type="text" placeholder="Enter Username" name="username" id="login_username">
 
             <label for="login_password"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" id="login_password" required>
+            <input type="password" placeholder="Enter Password" name="password" id="login_password">
 
             <button type="submit" class="mBtn">Login</button>
             <label>

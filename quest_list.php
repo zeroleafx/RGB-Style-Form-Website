@@ -37,7 +37,7 @@ $sql = "SELECT q.*,
                 END AS locked
         FROM quests q
         LEFT JOIN users u ON q.created_by = u.id
-        WHERE q.status = 'published'";
+        WHERE q.status IN ('published', 'closed')";
 
 
 $types = 'i';

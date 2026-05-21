@@ -6,23 +6,6 @@ require_once("helpers.php");
 // Close any expired quests
 close_expired_quests($conn);
 
-$search = trim($_GET['search']??'');
-$sort = $_GET['sort']??'newest';
-
-$sort_map = ['newest' => 'q.created_at DESC', 
-            'oldest' => 'q.created_at ASC', 
-            'level_high' => 'q.level_required DESC', 
-            'level_low' => 'q.level_required ASC', 
-            'difficulty_high' => 'q.difficulty DESC', 
-            'difficulty_low' => 'q.difficulty ASC', 
-            'highest_reward' => 'q.reward DESC', 
-            'lowest_reward' => 'q.reward ASC'
-        ];
-
-if(!isset($sort_map[$sort])){
-    $sort = 'newest';
-}
-
 $quest_id = (int)($_GET['id']??0);
 
 if($quest_id <= 0){
