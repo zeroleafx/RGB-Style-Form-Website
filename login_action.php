@@ -75,7 +75,7 @@ if ($result && mysqli_num_rows($result) === 1) {
             exit;
         } else {
             // Auto-unban expired temporary ban
-            $unban_sql = "UPDATE users SET banned_until = NULL WHERE id = ?";
+            $unban_sql = "UPDATE users SET banned_until = NULL, is_permanent_ban = 0, ban_reason = NULL WHERE id = ?";
             $unban_stmt = mysqli_prepare($conn, $unban_sql);
             if ($unban_stmt) {
                 mysqli_stmt_bind_param($unban_stmt, "i", $user['id']);

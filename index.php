@@ -370,8 +370,11 @@ if ($leaderboard_result) {
                         <p><span>Player:</span> Guest</p>
                         <p><span>Rank:</span> Unregistered</p>
                         <p><span>Access:</span> Browse only</p>
-                        <p><span>Level:</span> --</p>
-                        <p><span>Completed:</span> --</p>
+                        <br>
+                        <p><span>Demo Accounts: </span></p>
+                        <p>admin/admin123456</p>
+                        <p>member/member123456</p>
+                        <p>member1/member123456</p>
                     <?php else: ?>
                         <p><span>Player:</span> <?php echo htmlspecialchars($_SESSION['username'] ?? 'Unknown'); ?></p>
                         <p><span>Role:</span> <?php echo htmlspecialchars($_SESSION['member_group'] ?? 'member'); ?></p>

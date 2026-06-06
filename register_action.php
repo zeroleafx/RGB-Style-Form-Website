@@ -12,6 +12,11 @@ if (!$member_group) {
     exit;
 }
 
+if (strlen($username) < 3) {
+    echo "Username must be at least 3 characters.";
+    exit;
+}
+
 if (strlen($password) < 8) {
     echo "Password must be at least 8 characters long.";
     exit;
@@ -31,7 +36,7 @@ $check_sql = "SELECT id FROM users WHERE username = ?";
 $check_stmt = mysqli_prepare($conn, $check_sql);
 
 if (!$check_stmt) {
-    echo "註冊失敗：" . mysqli_error($conn);
+    echo "Registration failed: " . mysqli_error($conn);
     exit;
 }
 
@@ -41,7 +46,7 @@ $check_result = mysqli_stmt_get_result($check_stmt);
 
 if ($check_result && mysqli_num_rows($check_result) > 0) {
     mysqli_stmt_close($check_stmt);
-    echo "❌ 帳號已存在";
+    echo "❌ Username is taken.";
     exit;
 }
 
@@ -51,16 +56,16 @@ $sql = "INSERT INTO users (member_group, username, password) VALUES (?, ?, ?)";
 $stmt = mysqli_prepare($conn, $sql);
 
 if (!$stmt) {
-    echo "註冊失敗：" . mysqli_error($conn);
+    echo "Registration failed: " . mysqli_error($conn);
     exit;
 }
 
 mysqli_stmt_bind_param($stmt, "sss", $member_group, $username, $password);
 
 if (mysqli_stmt_execute($stmt)) {
-    echo "註冊成功";
+    echo "Registration successful.";
 } else {
-    echo "註冊失敗：" . mysqli_error($conn);
+    echo "Registration failed: " . mysqli_error($conn);
 }
 
 mysqli_stmt_close($stmt);

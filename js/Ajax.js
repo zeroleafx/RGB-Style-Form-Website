@@ -64,8 +64,10 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (res) {
                 $("#registerMessage").css("color", "green").html(res);
-                window.alert("註冊成功，跳轉至首頁");
-                window.location.href = "index.php";
+                if (res && /(successful|成功)/i.test(res)) {
+                    window.alert("註冊成功，跳轉至首頁");
+                    window.location.href = "index.php";
+                }
             }
         });
     });
@@ -91,7 +93,7 @@ $(document).ready(function () {
                 console.log("status:", status);
                 console.log("error:", error);
                 console.log("response:", xhr.responseText);
-                $("#loginMessage").css("color", "red").html("系統錯誤");
+                $("#loginMessage").css("color", "red").html("System error. Please try again later.");
             }
         });
     });

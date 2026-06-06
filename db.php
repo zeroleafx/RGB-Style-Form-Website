@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "root123456", "guild");
+$conn = mysqli_connect("localhost", "root", "root123456", "group_36");
 
 if (!$conn) {
     die("資料庫連線失敗：" . mysqli_connect_error());
